@@ -1,0 +1,80 @@
+SETCODE 市场类型
+0:深圳 1:上海,47:中金所期货 28:郑州商品 29:大连商品 30:上海商品,27:香港指数 31:香港主板,48:香港创业板...
+
+MINDIFF  返回某品种的最小变动价位(也是交易价格的最小间隔单位)
+
+MULTIPLIER  期货每手乘数
+
+TQFLAG  当前的复权状态,0:无复权 1:前复权 2:后复权 
+
+USEDDATANUM  当前使用的数据个数
+
+TOTALCAPITAL  当前总股本
+
+CAPITAL  当前流通股本
+
+FINANCE(1) 总股本(随时间可能有变化)
+FINANCE(2) 用法同SETCODE
+FINANCE(3) 沪深品种类型
+    0:指数,1:A股主板,2:中小板,3:创业板,4:科创板,5:B股,6:债券,7:基金,8:权证,9:其它,10:非沪深品种
+FINANCE(4) 沪深品种通达信二级行业代码
+FINANCE(5) B股
+FINANCE(6) H股
+FINANCE(7)  流通股本(随时间可能有变化)
+FINANCE(8)  股东人数(户)(上市公司的最新数据)
+FINANCE(9)  资产负债率.  即:(总资产-净资产-少数股东权益)/总资产*100
+FINANCE(10) 总资产
+FINANCE(11) 流动资产
+FINANCE(12) 固定资产
+FINANCE(13) 无形资产
+FINANCE(15) 流动负债
+FINANCE(16) 少数股东权益
+FINANCE(17) 资本公积金
+FINANCE(18)  每股公积金
+FINANCE(19) 股东权益(净资产)
+FINANCE(20) 营业收入
+FINANCE(21) 营业成本
+FINANCE(22) 应收帐款
+FINANCE(23) 营业利润
+FINANCE(24) 投资收益
+FINANCE(25) 经营现金流量
+FINANCE(26) 总现金流量
+FINANCE(27) 存货
+FINANCE(28) 利润总额
+FINANCE(29) 税后利润
+FINANCE(30) 净利润
+FINANCE(31) 未分配利润
+FINANCE(32)  每股未分配利润
+FINANCE(33)  每股收益(折算为全年收益),对于沪深品种有效
+FINANCE(34)  每股净资产
+
+FINANCE(35) 季报中调整后的每股净资产
+
+
+FINANCE(36)  股东权益比
+FINANCE(37)  第几期季度报告,1为一季报,2为中报,3为三季报,4为年报,对于沪深品种有效
+FINANCE(38)  每股收益(最近一期季报)
+FINANCE(40)  流通市值
+FINANCE(42)  上市的天数
+FINANCE(43)  净利润同比增长率
+FINANCE(44)  收入同比增长率
+FINANCE(45)  股息率
+FINANCE(46)  自由流通股本(股) 流通股本中减去占5%以上股份的部分
+FINANCE(49)  今日权息标识 0:无 1:分红 2:送转股 3:分红+送转股 4:配股
+FINANCE(50)  是否属于沪深300
+FINANCE(51)  是否含可转债
+FINANCE(52)  是否为融资融券标的
+FINANCE(53) 每股股息(港股,美股)
+FINANCE(54) 扣非净利润
+FINANCE(55) 研发费用
+FINANCE(56) 员工人数
+FINANCE(60)  行权比例(权证,期权)
+FINANCE(61)  行权价(权证,期权)
+FINANCE(62)  杠杆比率(权证,期权),实际杠杆比率为FINANCE(62)*FINANCE(68
+FINANCE(63)  内在价值(权证,期权)
+FINANCE(64)  溢价率(权证,期权)
+FINANCE(65)  时间价值(权证,期权)
+FINANCE(66)  剩余天数(期货,期权)
+FINANCE(67)  合约乘数(期权)
+FINANCE(68)  Delta对冲值(权证,期权)
+FINANCE(69)  认购认沽类型(股票期权),0表示是认购,1表示是认沽 

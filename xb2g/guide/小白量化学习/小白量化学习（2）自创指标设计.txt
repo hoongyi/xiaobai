@@ -1,0 +1,110 @@
+﻿小白量化学习（2）自创指标设计
+
+一、准备工作
+1、首先把“HP_formula.py”文件复制到自己的工程目录中。
+2、在新文件开始增加下面4条语句。
+import numpy as np
+import pandas as pd
+from HP_formula import *
+import tushare as ts
+
+二、对数据预处理
+我们采用与tushare旧股票数据格式。
+
+#首先要对数据预处理
+df = ts.get_k_data('600080',ktype='D')
+mydf=df.copy()
+CLOSE=mydf['close']
+LOW=mydf['low']
+HIGH=mydf['high']
+OPEN=mydf['open']
+VOL=mydf['volume']
+C=mydf['close']
+L=mydf['low']
+H=mydf['high']
+O=mydf['open']
+V=mydf['volume']
+
+三、仿通达信或大智慧公式
+通达信公式转为python公式的过程。
+1.‘:=’为赋值语句，用程序替换‘:=’为python的赋值命令‘='。
+2.‘:’为公式的赋值带输出画线命令，再替换‘:’为‘=’，‘:’前为输出变量，顺序写到return 返回参数中。
+3.全部命令转为英文大写。
+4.删除绘图格式命令。
+5.删除掉每行未分号; 。
+6.参数可写到函数参数表中.例如: def KDJ(N=9, M1=3, M2=3):
+
+例如通达信 KDJ指标公式描述如下。
+参数表 N:=9, M1:=3, M2:=3
+RSV:=(CLOSE-LLV(LOW,N))/(HHV(HIGH,N)-LLV(LOW,N))*100;
+K:SMA(RSV,M1,1);
+D:SMA(K,M2,1);
+J:3*K-2*D;
+
+# Python的KDJ公式
+def KDJ(N=9, M1=3, M2=3):
+    RSV = (CLOSE - LLV(LOW, N)) / (HHV(HIGH, N) - LLV(LOW, N)) * 100
+    K = SMA(RSV,M1,1)
+    D = SMA(K,M2,1)
+    J = 3*K-2*D
+    return K, D, J
+
+#-----------------------------------
+
+#根据上面原理，我们把大智慧RSI指标改
+#  为Python代码，如下。
+def RSI(N1=6, N2=12, N3=24):
+    """
+    RSI 相对强弱指标
+    """
+    LC = REF(CLOSE, 1)
+    RSI1 = SMA(MAX(CLOSE - LC, 0), N1, 1) / SMA(ABS(CLOSE - LC), N1, 1) * 100
+    RSI2 = SMA(MAX(CLOSE - LC, 0), N2, 1) / SMA(ABS(CLOSE - LC), N2, 1) * 100
+    RSI3 = SMA(MAX(CLOSE - LC, 0), N3, 1) / SMA(ABS(CLOSE - LC), N3, 1) * 100
+
+    return RSI1, RSI2, RSI3
+
+四、使用公式并绘图
+#假定我们使用RSI指标
+r1,r2,r3=RSI()
+
+mydf = mydf.join(pd.Series( r1,name='RSI1'))  
+mydf = mydf.join(pd.Series( r2,name='RSI2'))  
+mydf = mydf.join(pd.Series( r3,name='RSI3')) 
+mydf['S80']=80  #增加上轨80轨迹线
+mydf['X20']=20  #增加下轨20轨迹线
+
+mydf=mydf.tail(100)  #显示最后100条数据线 
+
+#下面是绘线语句
+mydf.S80.plot.line()
+mydf.X20.plot.line()
+mydf.RSI1.plot.line(legend=True)
+mydf.RSI2.plot.line(legend=True)
+mydf.RSI2.plot.line(legend=True)
+
+五、聚宽格式与tushare格式互转
+可把任何数据格式转换为ts的股票数据，
+这样就可以使用任何数据源来处理。
+我们这里介绍聚宽数据和与tushare格式互转。
+def jqtots(df1):  #聚宽格式转ts格式
+    a=[x.strftime("%Y-%m-%d") for x in df1.index]
+    df1.insert(0,'date',a)
+    df1=df1.reset_index(level=None, drop=True ,col_level=0, col_fill='')  
+    return df1
+
+def tstojq(df1):  #ts格式转聚宽格式
+    a=[dt.datetime.strptime(x,'%Y-%m-%d') for x in df1['date']]
+    df1.insert(0,'date2',a)
+    df1=df1.reset_index(level=None, drop=True ,col_level=0, col_fill='')  
+    df1.index=df1['date2']
+    del df1['date2']
+    del df1['date']
+    return df1
+
+
+通过这2节学习，量化分析的道路已经为你开启了。
+
+独狼荷蒲qq:2775205
+通通python量化群:524949939
+微信公众号：独狼股票分析

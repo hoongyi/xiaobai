@@ -1,0 +1,86 @@
+﻿小白量化学习（5）建立本地股票数据库
+
+    为了方便本地离线学习回测,可以在本地建立xbdata目录，存放股票数据。
+
+    一、本地建立xbdata目录
+    为了方便本地离线学习回测,可以在本地建立xbdata目录，存放股票数据。
+例如: C:\xbdata。
+    不要把数据和程序放到一个目录中，这样无法及时备份自己的程序了。
+
+    二、可以在网盘中下载1991-2018年的股票数据
+网盘下载链接如下：
+https://pan.baidu.com/s/1jxSaB8JzOu6hNvFipqfGzQ
+
+    三、引入模块HP_data
+    在HP_data模块中，我们仿造了get_k_data()函数。
+    因此在程序中。
+    import HP_data  as ts
+    替换下面这句，就可以脱机学习了。
+    import tushare as ts
+
+    get_k_data()函数定义如下，ss是股票代码。
+    def get_k_data(ss,ktype='D',start='1991-01-01',end='2018-10-15',
+                    index=False,autype='qfq')
+
+
+    四、下载tushare股票数据
+    [data_ts_all2.py]下载全部指数数据。
+    [data_ts_all3.py]下载全部股票数据数据。
+    下载全部股票数据数据程序在小白量化群(524949939)中下载。
+
+
+    五、使用前面KDJ指标的离线数据示例
+
+# -*- coding: utf-8 -*-
+# KDJ指标离线数据演示
+import numpy as np
+import pandas as pd
+from HP_formula import *
+#import tushare as ts
+import HP_data  as ts
+
+def KDJ(N=9, M1=3, M2=3):
+    RSV = (CLOSE - LLV(LOW, N)) / (HHV(HIGH, N) - LLV(LOW, N)) * 100
+    K = SMA(RSV,M1,1)
+    D = SMA(K,M2,1)
+    J = 3*K-2*D
+    return K, D, J
+
+#首先要对数据预处理
+df = ts.get_k_data('600080',ktype='D')
+mydf=df.copy()
+CLOSE=mydf['close']
+LOW=mydf['low']
+HIGH=mydf['high']
+OPEN=mydf['open']
+VOL=mydf['volume']
+C=mydf['close']
+L=mydf['low']
+H=mydf['high']
+O=mydf['open']
+V=mydf['volume']
+
+k,d,j=KDJ()
+
+mydf = mydf.join(pd.Series( k,name='K'))  
+mydf = mydf.join(pd.Series( d,name='D'))  
+mydf = mydf.join(pd.Series( j,name='J')) 
+mydf['S80']=80  #增加上轨80轨迹线
+mydf['X20']=20  #增加下轨20轨迹线
+
+mydf=mydf.tail(100)  #显示最后100条数据线 
+
+#下面是绘线语句
+mydf.S80.plot.line()
+mydf.X20.plot.line()
+mydf.K.plot.line(legend=True)
+mydf.D.plot.line(legend=True)
+mydf.J.plot.line(legend=True)
+
+#--------------------------------
+建议申请聚宽免费帐户,可以获取期货数据.通过下面网址申请,免费数据量翻倍.申请网址如下:
+https://www.joinquant.com/default/index/sdk?channelId=11ab957b5b19ebc3302ee864cee476b
+
+独狼荷蒲qq:2775205
+小白量化群:524949939
+微信公众号：独狼股票分析

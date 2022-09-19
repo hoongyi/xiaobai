@@ -1,0 +1,78 @@
+﻿小白量化学习（4）基本面选股与股票池
+
+    选股一般有多种方式，传统方式有基本面选股，技术指标选股。目前还有量化分析选股，深度学习选股等等。
+
+一、股票基本面数据获取
+我们使用tushare股票数据,做一个基本面选股的示例。
+tushare的ts.get_today_all()方法能获取沪深上市公司的实时数据，以此获取股票名称，市盈率，市净率。
+返回的数据内容如下:
+code：代码
+name：名称
+changepercent：涨跌幅
+trade：现价
+open：开盘价
+high：最高价
+low：最低价
+settlement：昨日收盘价
+volume：成交量
+turnoverratio：换手率
+amount：成交金额
+per：市盈率
+pb：市净率
+mktcap：总市值
+nmc：流通市值
+
+二、选股代码设计
+1.选股策略流程设计
+ 我们写一个简单的例子，大家可以根据这个例子来增加自己新的条件。
+（1）获取沪深上市公司的实时数据，其中包含股票代码，市盈率，市净率。
+（2）删除业绩较差的ST股票。
+（3）选取市盈率前100名股票，作为股票池zxg。
+（4）把选出的股票代码，保存到自选股板块文件“zxg.dat”文件中。
+（5）读入自选股板块文件“zxg.dat”文件中的股票代码，建立新的股票池zxg2。
+
+2.根据上面策略，写出Python代码。
+
+# -*- coding: utf-8 -*-
+#通过基本面选股，建立股票池
+import pickle
+import tushare as ts
+#import HP_data as ts  #如果有xbdata数据,离线学习用这句替换上一句.
+
+#（1）获取最新股票数据
+df=ts.get_today_all()
+df1=df.copy()  #建立一个备份
+
+#（2）删除业绩较差的ST股票
+df1['a']=[('ST' in x )for x in df1.name.astype(str)]  #先给ST股票做标记a
+df1=df1.set_index('a')  #将a设置为索引 
+df1=df1.drop(index=[True]) #删除ST股票
+df1=df1.reset_index(drop=True) #重建默认索引
+
+
+#（3）选取市盈率前100名股票,作为股票池zxg
+n=100  #选择前n个数据
+df2=df1.sort_values(by=['per'],ascending=True).head(n)
+zxg=list(df2.code)  #把选出股票代码转为列表
+print('\n基本面选股结果zxg ：',zxg)
+
+#（4）把选出的股票代码，保存到自选股板块文件“zxg.dat”文件中。
+f = open('zxg.dat', 'wb')  
+pt=pickle.dumps(zxg,0)
+f.write(pt)
+f.close()  
+
+#（5）获取zxg.dat文件,并还原为股票池数据zxg2
+f = open('zxg.dat', 'rb')  
+zxg2=pickle.load(f)
+f.close()  
+print('\n获取股票池数据zxg2：',zxg2)
+
+
+本节课讲完了，是不是选股建立股票池很容易。
+建议申请聚宽免费帐户,可以获取期货数据.通过下面网址申请,免费数据量翻倍.申请网址如下:
+https://www.joinquant.com/default/index/sdk?channelId=11ab957b5b19ebc3302ee864cee476b
+
+独狼荷蒲qq:2775205
+小白量化群:524949939
+微信公众号：独狼股票分析
