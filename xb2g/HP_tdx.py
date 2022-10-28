@@ -103,18 +103,12 @@ def 连接通达信(code1,已经连接):
 
 
 
-def 连接通达信(code1,已经连接):
-    global tdxapi
-    if(已经连接<1):
-        tdxapi=TdxInit(ip='183.60.224.178',port=7709)
-    df=获取日线数据 (code=code1)
-    return df
 
 def 获取当天实时tick(code,已经连接,nStart):#成功
     global tdxapi
     if(已经连接<1):
         tdxapi=TdxInit(ip='183.60.224.178',port=7709)
-    df=get_transaction_data(nMarket = 0,code=code,\
+    df=get_transaction_data(nMarket=0, code=code,\
                                         nStart=nStart, nCount=10000)
     df1 = pd.DataFrame(df)
     return df1
@@ -133,16 +127,16 @@ def 获取历史的tick(code,已经连接,nStart,date):#data不是‘’的类�
 
 def 获取通达信某股的tick(code,已经连接,nStart):
     a=0
-    df1=获取通达信数据.获取当天实时tick(code=code,已经连接=已经连接,nStart=0)
+    df1=获取当天实时tick(code=code,已经连接=已经连接,nStart=0)
     if(df1['time'][0]!='09:25'):
         a=1
-        df2=获取通达信数据.获取当天实时tick(code=code,已经连接=已经连接,nStart=len(df1['time']))
+        df2=获取当天实时tick(code=code,已经连接=已经连接,nStart=len(df1['time']))
         if(str(df2['time'][0])!='09:25'):
             a=2      
-            df3=获取通达信数据.获取当天实时tick(code=code,已经连接=已经连接,nStart=(len(df1['time'])+len(df2['time'])))
+            df3=获取当天实时tick(code=code,已经连接=已经连接,nStart=(len(df1['time'])+len(df2['time'])))
             if(str(df3['time'][0])!='09:25'):
                 a=3      
-                df4=获取通达信数据.获取当天实时tick(code=code,已经连接=已经连接,nStart=len(df1['time'])+len(df2['time'])+len(df3['time']))
+                df4=获取当天实时tick(code=code,已经连接=已经连接,nStart=len(df1['time'])+len(df2['time'])+len(df3['time']))
                 
                                 
     if(a==0):result = df1
@@ -999,9 +993,12 @@ def data_fq2(market = 1,code='600080',fqtype='01'):
     xdxr_data.to_csv('./data/ls2.csv' , encoding= 'gbk')
     return
 
-
+def tdx_ping_stk(ip,port,type):
+    pass
 def tdx_ping100():
     #
+    future_ip_list=[]
+    stock_ip_list=[]
     data_future = [tdx_ping_future(x['ip'], x['port'], 'future') for x in future_ip_list]
     best_future_ip = future_ip_list[data_future.index(min(data_future))]
     print('\nbest_future_ip',best_future_ip)
@@ -1229,7 +1226,9 @@ if __name__ == '__main__':
 #    #sh=sh[sh.type=='A股股票']
 #    print(sz)
 
-#    df=get_transaction_data()
+    df=get_transaction_data()
+    print(df)
+    获取某股竞价数据('688002',0,0)
 #    df=get_xdxr_info(1,'600020')
 #    df=get_company_info_category()
 #    df=get_index_bars()
