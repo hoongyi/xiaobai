@@ -16,17 +16,18 @@ global C,L,H,O,V
 
 hq=htdx.TdxInit(ip='183.60.224.178',port=7709)  ##初始化通达信
 #codes=htdx.getblock2('沪深300') #返回板块中的股票
-codes=htdx.getblock2('科创50') #返回板块中的股票
+#codes=htdx.getblock2('科创50') #返回板块中的股票
+codes=htdx.getSH()
 
 print('小白量化选股: 雷霆指标选股')
 print('输出股票池或板块中股票')
 print(codes)
 
-import easytrader
-ths = easytrader.use('ths')
-ths.connect("C:\\同花顺软件\\同花顺\\xiadan.exe")
-ths.enable_type_keys_for_editor()
-print(ths.balance)
+# import easytrader
+# ths = easytrader.use('ths')
+# ths.connect("C:\\同花顺软件\\同花顺\\xiadan.exe")
+# ths.enable_type_keys_for_editor()
+# print(ths.balance)
 
 
 #均线选股函数
@@ -54,8 +55,9 @@ def function(cd):
     #仿通达信，大智慧公式计算和选股
 
     B=CROSS(MA(C,5),MA(C,20))
-    ths.buy(code, price=C.iloc[-1], amount=500)
-    
+    #ths.buy(code, price=C.iloc[-1], amount=500)
+    if B.iloc[-1]:
+        print(code)
 
 
 

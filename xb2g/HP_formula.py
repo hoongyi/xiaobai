@@ -2419,6 +2419,15 @@ def KD(N=9, M1=3, M2=3):
     D=SMA(K,M2,1);
     return K, D
 
+def ZST_KD(CLOSE,LOW,HIGH,N=9, M1=3, M2=3):
+    """
+    随机指标KD
+    """
+    RSV=(CLOSE-LLV(LOW,N))/(HHV(HIGH,N)-LLV(LOW,N))*100
+    K=SMA(RSV,M1,1)
+    D=SMA(K,M2,1)
+    return K, D
+
 def SKDJ(N=9, M=3):
     """
     SKDJ 慢速随机指标

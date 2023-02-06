@@ -60,8 +60,8 @@ def XBHDMMX(N=24,M=2,X=25):
 htdx.TdxInit(ip='183.60.224.178',port=7709)
 
 #获取股票行情数据
-code='603260'
-df2 = htdx. get_security_bars(nCategory=4,nMarket = 0,code=code)
+code='301190'
+df2 = htdx.get_security_bars(nCategory=4,code=code)
 df3=df2
 
 ##数据规格化 
