@@ -756,15 +756,30 @@ def get_szcode2(t=''):
     return base
 
 #获取上海股票代码表
-def get_shcode2(t=''):
-    base=pd.read_csv('./data/sh.csv' , encoding= 'gbk')
+def get_shcode2(t='',k=''):
+    base=pd.read_csv('./data/sh.csv' , encoding= 'gbk',dtype=object)
     base= base.drop('Unnamed: 0', axis=1)
     if t!='':
         base=base[base['type']==t]    
         base=base.reset_index(drop=True)
+    if k!='':
+        base=base[base['kind']==k]
+        base=base.reset_index(drop=True)
     base.code=['0'*(6-len(x)) + x for x in base.code.astype(str)]
     return base
 
+#获取A股票代码表
+def get_A_stocks():
+    sh=pd.read_csv('./data/sh.csv', encoding= 'gbk',dtype=object)
+    sz = pd.read_csv('./data/sz.csv', encoding='gbk', dtype=object)
+    base = pd.concat([sh,sz])
+    base= base.drop('Unnamed: 0', axis=1)
+    base=base[base['type']=='证券']
+    base=base.reset_index(drop=True)
+    base=base[base['kind'].isin(['A股股票','科创板','中小板','创业板'])]
+    base=base.reset_index(drop=True)
+    base.code=['0'*(6-len(x)) + x for x in base.code.astype(str)]
+    return base
 
 # 板块相关参数
 BLOCK_DEFAULT = "block.dat"

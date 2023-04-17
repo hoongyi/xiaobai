@@ -29,7 +29,9 @@ def szcode():
     sz['type2']=10
     sz['py']=''
     for i in range(len(sz)):
-        #print(i,sz['code'][i])
+        print(i,sz['code'][i])
+        if sz['code'][i] == '':
+            continue
         x=int(sz['code'][i])
         if x<2000:
             sz.loc[i,'type']='证券'
@@ -109,6 +111,8 @@ def shcode():
     sh['py']=''
     for i in range(len(sh)):
         #print(i,sh['code'][i])
+        if sh['code'][i] == '':
+            continue
         x=int(sh['code'][i])
         if x<1000:
             sh.loc[i,'type']='指数板块'

@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/xb2g/data/all_stock.csv" charset="GBK" />
     <file url="file://$PROJECT_DIR$/xb2g/data/block.dat.csv" charset="GBK" />
     <file url="file://$PROJECT_DIR$/xb2g/data/block_fg.dat.csv" charset="GBK" />
     <file url="file://$PROJECT_DIR$/xb2g/data/block_gn.dat.csv" charset="GBK" />
     <file url="file://$PROJECT_DIR$/xb2g/data/block_zs.dat.csv" charset="GBK" />
     <file url="file://$PROJECT_DIR$/xb2g/data/codes.csv" charset="GBK" />
     <file url="file://$PROJECT_DIR$/xb2g/data/hq.csv" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/xb2g/data/sh.csv" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/xb2g/data/sz.csv" charset="GBK" />
     <file url="file://$PROJECT_DIR$/xb2g/data/扩展行情五档.txt" charset="GBK" />
     <file url="file://$PROJECT_DIR$/xb2g/data/股票代码.txt" charset="GBK" />
     <file url="file://$PROJECT_DIR$/xb2g/data/行情.txt" charset="GBK" />
     <file url="file://$PROJECT_DIR$/xb2g/data/行情站点.txt" charset="GBK" />
     <file url="file://$PROJECT_DIR$/xb2g/data/财务.txt" charset="GBK" />
     <file url="file://$PROJECT_DIR$/xb2g/data/除权信息.txt" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/xb2g/行情站点.txt" charset="GBK" />
   </component>
 </project>

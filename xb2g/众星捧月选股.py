@@ -22,17 +22,22 @@ import HP_tdx as htdx
 from HP_formula import *
 
 hq=htdx.TdxInit(ip='183.60.224.178',port=7709)  ##初始化通达信
-codes=htdx.getblock2('沪深300') #返回板块中的股票
-print('小白量化选股: 雷霆指标选股')
-print('输出股票池或板块中股票')
-print(codes)
+#codes=htdx.getblock2('沪深300') #返回板块中的股票
+shCodes = htdx.get_A_stocks()
+codes=set(shCodes['code'])
+print('众星捧月选股')
+print('输出股票池中股票')
+print(shCodes[['code','name']])
 
 #选股函数
 def function(cd):
     global CLOSE, LOW, HIGH, OPEN, VOL
     global C, L, H, O, V
     df3=htdx.get_security_bars(nCategory=4,nMarket = -1,code=cd,\
-                    nStart=0, nCount=500) #获取指定范围的证券K线
+                    nStart=0, nCount=100) #获取指定范围的证券K线
+    if df3.empty:
+       # print(cd)
+        return 0
     ##数据规格化 
     df3.dropna(inplace=True)
     #小白数据规格化
@@ -61,20 +66,38 @@ def function(cd):
     VV1 = AND(AND(MV5 > REF(MV5, 1), MV10 >= REF(MV10, 1)), V > REF(V, 1) * 1.2)
     KD1 = AND(K > REF(K, 1), D >= REF(D, 1))
     VA = AND(AND(AND(COUNT(CROSS(K, D), 4) >= 1, COUNT(CROSS(MA5, MA10), 4) >= 1), COUNT(CROSS(MV5, MV10), 4) >= 1), COUNT(CROSS(DIF, DEA), 4) >= 1)
-    XG2 = IF(AND(AND(AND(AND(V1, VV1), KD1), MACD1), VA), 1, 0)
-    if XG2.all():
+    #XG2 = IF(AND(AND(AND(AND(V1, VV1), KD1), MACD1), VA), 1, 0)
+    XG2 = V1+VV1+KD1+MACD1+VA
+    B2 = list(XG2)
+    lastN = len(B2) - 1
+    if lastN > 0 and B2[lastN] >= 5:
         return 1
     else:
         return 0
-    
-
+import easytrader
+ths = easytrader.use('ths')
+ths.connect("C:\\同花顺软件\\同花顺\\xiadan.exe")
+ths.enable_type_keys_for_editor()
+print(ths.balance)
+print('选出的股票')
 #下面开始进行板块或股票池选股
 myblock=[]  #选股池
 start = time.time()
 for code in codes:
-     buy=function(code)  #计算股票选股函数
-     if buy==1:
-         myblock.append(code)
+    try:
+        buy=function(code)  #计算股票选股函数
+        if buy==1:
+            print(code,shCodes[shCodes['code']==code])
+            ths.buy(code, price=C.iloc[-1], amount=500)
+            myblock.append(code)
+    except:
+        print('e')
+
+# for stock in myblock:
+#     try:
+#         ths.buy(code, price=C.iloc[-1], amount=500)
+#     except:
+#         print('e')
 
 print('输出选出的股票池')
 print(myblock)
